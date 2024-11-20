@@ -1,42 +1,67 @@
 import streamlit as st
-from models.pollution_models import pollution_phase_portrait
+from models.pollution_models import pollution_model_page
+from models.resource_models import resource_model_page
 
-# Configure page layout
-st.set_page_config(page_title="Pollution Models App", layout="wide")
+# Set page configuration (must be the first Streamlit command)
+st.set_page_config(page_title="Cascading Regime Shifts", layout="wide")
 
-# Top Navigation
-st.title("Cascading Regime Shifts Dashboard")
-navigation = st.selectbox(
-    "Navigate to",
-    ["Pollution Models", "Resource Models", "Control Mechanisms"],
-    key="navigation",
-)
+# Load custom CSS
+with open("assets/style.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# Sidebar for Parameters
+# Initialize session state for navigation
+if "section" not in st.session_state:
+    st.session_state.section = "Welcome"
+
+# Handle navigation using session state
+def navigate_to(new_section):
+    """Update the current section."""
+    st.session_state.section = new_section
+
+# Sidebar Navigation
+# Sidebar Navigation with Radio Buttons
 with st.sidebar:
-    st.header("Adjust Parameters")
-    if navigation == "Pollution Models":
-        st.subheader("Pollution Models Parameters")
-        U1 = st.slider("U1 (Pollution usage 1)", 0.0, 5.0, 0.2, 0.01)
-        V1 = st.slider("V1 (Pollution release 1)", 0.0, 5.0, 2.0, 0.1)
-        S1 = st.slider("S1 (Pollution supply 1)", 0.0, 1.0, 0.9, 0.01)
-        alpha1 = st.slider("α1 (Exponent 1)", 2, 10, 5, 1)
-        U2 = st.slider("U2 (Pollution usage 2)", 0.0, 5.0, 0.3, 0.01)
-        V2 = st.slider("V2 (Pollution release 2)", 0.0, 5.0, 3.0, 0.1)
-        S2 = st.slider("S2 (Pollution supply 2)", 0.0, 1.0, 0.95, 0.01)
-        alpha2 = st.slider("α2 (Exponent 2)", 2, 10, 5, 1)
-        delta = st.slider("δ (Dispersion factor)", 0.01, 1.0, 0.9, 0.01)
-        Z = st.slider("Z (Interaction coefficient)", 0.01, 2.0, 0.6, 0.01)
+    st.title("Navigation")
+    section = st.radio(
+        "Navigate to:",
+        ["Welcome", "Pollution Models", "Resource Models"],
+        index=["Welcome", "Pollution Models", "Resource Models"].index(st.session_state.section)
+    )
+    # Sync sidebar navigation with session state
+    if section != st.session_state.section:
+        navigate_to(section)
 
-# Main Content
-if navigation == "Pollution Models":
-    st.subheader("Pollution Models: Phase Portrait")
-    pollution_phase_portrait(U1, V1, S1, U2, V2, S2, alpha1, alpha2, delta, Z)
 
-elif navigation == "Resource Models":
-    st.subheader("Resource Models")
-    st.write("Resource Models will be implemented soon.")
 
-elif navigation == "Control Mechanisms":
-    st.subheader("Control Mechanisms")
-    st.write("Control Mechanisms will be implemented soon.")
+# Welcome Page
+if st.session_state.section == "Welcome":
+    st.title("Welcome to the Cascading Regime Shifts App")
+    st.write("""
+        This app explores cascading regime shifts in Pollution and Resource systems.
+        Use this tool to visualize dynamics with and without dispersion, and understand
+        the effects of control mechanisms on these systems.
+    """)
+    st.write("""
+        You can navigate to different sections of the app using the buttons below.
+        Use the sidebar to view, hide, and access different sections of the app.
+    """)
+    st.write("### Explore Models:")
+
+    # Column buttons for navigation
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Pollution Models"):
+            navigate_to("Pollution Models")
+    with col2:
+        if st.button("Resource Models"):
+            navigate_to("Resource Models")
+
+# Pollution Models Page
+if st.session_state.section == "Pollution Models":
+    st.title("Pollution Models")
+    pollution_model_page()
+
+# Resource Models Page
+if st.session_state.section == "Resource Models":
+    st.title("Resource Models")
+    resource_model_page()

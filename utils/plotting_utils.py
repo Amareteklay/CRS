@@ -11,10 +11,10 @@ def generate_phase_portrait(U1, V1, S1, U2, V2, S2, alpha1, alpha2, delta, Z):
     """
     # Define the nullclines
     def fx(x1):
-        return (1 / (delta * Z)) * (-U1 + S1 * x1 - V1 * (x1 ** alpha1 / (1 + x1 ** alpha1)) + delta * x1)
+        return (1/(delta*Z)) * (-U1 + S1*x1 - V1*(x1**alpha1/(1+x1**alpha1)) + delta*x1)
 
     def gx(x2):
-        return (1 / delta) * (-U2 + S2 * x2 - V2 * (x2 ** alpha2 / (1 + x2 ** alpha2)) + Z * x2)
+        return (1/delta) * (-U2 + S2*x2 - V2*(x2**alpha2/ (1+x2**alpha2)) + Z*x2)
 
     # Derivatives for the vector field
     def dx1_dt(x1, x2):
@@ -45,7 +45,7 @@ def generate_phase_portrait(U1, V1, S1, U2, V2, S2, alpha1, alpha2, delta, Z):
     fig, ax = plt.subplots(figsize=(12, 8))
 
     # Plot the nullclines
-    x_values = np.linspace(0, 3, 1000)
+    x_values = np.linspace(0, 5, 1000)
     ax.plot(x_values, fx(x_values), label="Nullcline: fx(x1) = 0", color="green")
     ax.plot(gx(x_values), x_values, label="Nullcline: gx(x2) = 0", color="red")
 

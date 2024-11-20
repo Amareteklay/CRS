@@ -1,0 +1,17 @@
+/* styles.css */
+[data-testid="collapsedControl"] svg {
+    color: #6b26ff;
+}
+[data-testid="collapsedControl"]:hover svg {
+    color: #FF5733;
+}
+
+.st-emotion-cache-qsoh6x, 
+.st-emotion-cache-1b2ybts {
+    fill: #6b26ff !important;
+}
+
+.st-emotion-cache-1igbibe {
+    background-color: #6b26ff;
+    color: aliceblue !important;
+}
